@@ -1,0 +1,2 @@
+$(document).ready(function () {$("#submit-915412580").bind("click", function (event) {$.ajax({data:$("#submit-915412580").closest("form").serialize(), type:"post", url:"\/Twitter\/users\/register"});
+return false;});});

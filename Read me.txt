@@ -1,0 +1,25 @@
+
+* This is a online system which has functionalies of twitter.
+
+*The system is deployed online and can be used accessing the
+ following link:
+ 				
+ 				http://twitter-teamlab.esy.es/
+
+			 	for a better look at the functionalities one can log in with 
+			 	the following credentials:
+			 	
+			 	user: ashikee
+			 	password:ashikee
+
+			 	or, also one can create new accounts and generate new datas.  
+
+
+ * Database sql files and entity relationship diagram is in database folder.
+
+
+ * This source code can be downloaded from the follwing link:
+
+ 		https://github.com/Abhi4010/Twitter
+
+
