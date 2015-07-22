@@ -1,5 +1,5 @@
 
-* This is a online system which has functionalies of twitter.
+* This is a online system which has functionalies of twitter developed by me Ashikee Ghosh.
 
 *The system is deployed online and can be used accessing the
  following link:
