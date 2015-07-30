@@ -20,6 +20,5 @@
 
  * This source code can be downloaded from the follwing link:
 
- 		https://github.com/Abhi4010/Twitter
-
+ 	
 
