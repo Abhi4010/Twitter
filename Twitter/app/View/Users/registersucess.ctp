@@ -7,7 +7,8 @@
 <?php echo $this->element("c9"); ?>
 <div class="jumbotron">
 <h3>Joined in Twitter</h3>
-<br/><br/>
+<br/>
+<br/>
 <h4> <?php echo $user ?> has joined twitter </h4>
 <br/>
 <h4> Please click on the log in button, log into twitter and tweet.

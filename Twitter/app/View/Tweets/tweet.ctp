@@ -34,13 +34,7 @@ if( !empty($tweetdatas)  && $tweetdatas !="empty")
   	foreach($tweetdatas as $tweet)
 	{
 		echo '<div 
-		style=
-		"background:#E0E6F8; 
-		padding-left: 20px;
-		padding-top: 10px;
-	    padding-right: 20px;
-	    padding-bottom: 10px;" 
-	    class="jumbotron">' ;
+		style="background:#E0E6F8;padding-left: 20px;"class="jumbotron">' ;
 		echo $this->element("c9"); 
 		echo $this->HTML->link($tweet['Tweet']['user_id'],
 		array('controller' => 'tweets','action' =>'profile',

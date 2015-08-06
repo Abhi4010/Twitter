@@ -11,7 +11,7 @@
   <div class="col-md-4"></div>
 	<div class="col-md-4">
 		<fieldset>
-			<legend><?php echo __('Login'); ?></legend>
+			<legend>Login</legend>
 			<?php
 				//login form
 				echo $this->Form->create('User',array('id' => 'login_form'));
