@@ -214,7 +214,7 @@
 	      	$this->set('name',$name);
 			$this->set('userId',$userId);
 			$this->set('tweetCount', $this->Tweet->getTweetCount($userId));
-			$this->set('userLatestTweet',$$this->Tweet->getLatestTweet($userId));
+			$this->set('userLatestTweet',$this->Tweet->getLatestTweet($userId));
 
 		}
 

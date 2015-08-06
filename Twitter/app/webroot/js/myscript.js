@@ -61,7 +61,7 @@ $(function()
 	$("#name").focusout(
 		function()
 		{
-			check_name();
+			check_data("name");
 		}
 	);
 	
@@ -69,25 +69,25 @@ $(function()
 	$("#user_id").focusout(
 		function()
 		{
-			check_user_id();
+			check_data("user_id");
 		}
 	);
 	$("#password").focusout(
 		function()
 		{
-			check_password();
+			check_data("password");
 		}
 	);
 	$("#mail").focusout(
 		function()
 		{
-			check_mail();
+			check_data("mail");
 		}
 	);
 	$("#retype_password").focusout(
 		function()
 		{
-			check_retype_password();
+			check_data("retype_password");
 		}
 	);  
 
@@ -96,191 +96,186 @@ $(function()
 	$("#login_password").focusout(
 		function()
 		{
-			check_login_password();
+			check_data("login_password");
 		}
 	);  
 	$("#login_user_id").focusout(
 		function()
 		{
-			check_login_user_id();
+			check_data("login_user_id");
 		}
 	);  
 
-	function check_tweet()
+
+	function check_data(attribute)
 	{
-			if( $('#tweet').val().length  > max_tweet_size)
-		{
-			$("#tweet_error").show();
-			error_tweet = true;
+		var name_length, pattern;
 
-		}
-		if( $('#tweet').val().length  <= max_tweet_size)
+		// Name
+		if(attribute == "name" )
 		{
-			$("#tweet_error").hide();
-			error_tweet = false;
-		}
-		console.log(error_tweet);
+			 name_length = $("#name").val().length;
+			 pattern = new RegExp(/^[+a-zA-Z0-9_-]{4,20}$/i);
+			if(!pattern.test($("#name").val()))
+			{
+				$("#name_error").html("Name must be between 4 to 20 characters and can contain a-z, A-z, 0-9, _,- ");
+					$("#name_error").show();
+					error_name = true;
+				
 
-	}
+			}
+			else
+			{
+				$("#name_error").hide();
+					error_name = false;
 
-	function check_name()
-	{
-		
-		var name_length = $("#name").val().length;
-		var pattern = new RegExp(/^[+a-zA-Z0-9_-]{4,20}$/i);
-		if(!pattern.test($("#name").val()))
-		{
-			$("#name_error").html("Name must be between 4 to 20 characters and can contain a-z, A-z, 0-9, _,- ");
-				$("#name_error").show();
-				error_name = true;
-			
+			}
 
-		}
-		else
-		{
-			$("#name_error").hide();
-				error_name = false;
 
 		}
 
-	}
-
-	function check_login_user_id()
-	{
-		
-		var name_length = $("#login_user_id").val().length;
-		var pattern = new RegExp(/^[+a-zA-Z0-9_-]{4,20}$/i);
-		if(!pattern.test($("#login_user_id").val()))
+		//User Id
+		if(attribute == "user_id")
 		{
-			$("#login_user_id_error").html("User Id must be between 4 to 20 characters and can contain a-z, A-z, 0-9, _,- ");
-				$("#login_user_id_error").show();
-				error_login_user_id = true;
-			
+			name_length = $("#user_id").val().length;
+			pattern = new RegExp(/^[+a-zA-Z0-9_-]{4,20}$/i);
+			if(!pattern.test($("#user_id").val()))
+			{
+				$("#user_id_error").html("User name must be between 4 to 20 characters and can contain a-z, A-z, 0-9, _,- ");
+					$("#user_id_error").show();
+					error_user_id = true;
+				
+
+			}
+			else
+			{
+				$("#user_id_error").hide();
+					error_user_id = false;
+
+			}
 
 		}
-		else
+		//Password
+		if(attribute == "password" )
 		{
-			$("#login_user_id_error").hide();
-				error_login_user_id = false;
-
-		}
-
-
-	}
-	function check_user_id()
-	{
-		
-		var name_length = $("#user_id").val().length;
-		var pattern = new RegExp(/^[+a-zA-Z0-9_-]{4,20}$/i);
-		if(!pattern.test($("#user_id").val()))
-		{
-			$("#user_id_error").html("User name must be between 4 to 20 characters and can contain a-z, A-z, 0-9, _,- ");
-				$("#user_id_error").show();
-				error_user_id = true;
-			
-
-		}
-		else
-		{
-			$("#user_id_error").hide();
-				error_user_id = false;
-
-		}
-
-
-	}
-	function check_password()
-	{
-		
-		var name_length = $("#password").val().length;
-		var pattern = new RegExp(/^[+a-zA-Z0-9]{4,8}$/i);
-		if(!pattern.test($("#password").val()))
-		{
-			$("#password_error").html("Password must be between 4 to 8 characters and can contain a-z, A-z, 0-9");
+			name_length = $("#password").val().length;
+			pattern = new RegExp(/^[+a-zA-Z0-9]{4,8}$/i);
+			if(!pattern.test($("#password").val()))
+			{
+				$("#password_error").html("Password must be between 4 to 8 characters and can contain a-z, A-z, 0-9");
 				$("#password_error").show();
 				error_password = true;
+			}
+			else
+			{
+				$("#password_error").hide();
+					error_password = false;
+
+			}
+
+		}
+		//Mail
+		if(attribute == "mail" )
+		{
+			name_length = $("#mail").val().length;
+			pattern = new RegExp(/^[+a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i);
+			if(!pattern.test($("#mail").val()))
+			{
+				$("#mail_error").html("Invalid email");
+					$("#mail_error").show();
+					error_password = true;
+			}
+			else
+			{
+				$("#mail_error").hide();
+					error_mail = false;
+
+			}
+		}
+
+		//Retype password
+		if(attribute =="retype_password" )
+		{
+			var password = $("#password").val();
+			var retype_password = $("#retype_password").val();
+			
+			if(password !=  retype_password) {
+				$("#retype_password_error").html("Passwords don't match");
+				$("#retype_password_error").show();
+				error_retype_password = true;
+			} 
+			else {
+					console.log(retype_password);
 			
 
+				$("#retype_password_error").hide();
+				error_retype_password = false;
+			}
+
 		}
-		else
+		//Tweet
+		if(attribute == "tweet")
 		{
-			$("#password_error").hide();
-				error_password = false;
+
+			if( $('#tweet').val().length  > max_tweet_size)
+			{
+				$("#tweet_error").show();
+				error_tweet = true;
+
+			}
+			if( $('#tweet').val().length  <= max_tweet_size)
+			{
+				$("#tweet_error").hide();
+				error_tweet = false;
+			}
 
 		}
+		//User id for login
+		if(attribute == "login_user_id")
+		{
+			name_length = $("#login_user_id").val().length;
+			pattern = new RegExp(/^[+a-zA-Z0-9_-]{4,20}$/i);
+			if(!pattern.test($("#login_user_id").val()))
+			{
+				$("#login_user_id_error").html("User Id must be between 4 to 20 characters and can contain a-z, A-z, 0-9, _,- ");
+				$("#login_user_id_error").show();
+				error_login_user_id = true;
+			}
+			else
+			{
+				$("#login_user_id_error").hide();
+					error_login_user_id = false;
 
+			}
+
+		}
+		//password for login
+		if(attribute == "login_password" )
+		{
+			name_length = $("#login_password").val().length;
+			pattern = new RegExp(/^[+a-zA-Z0-9]{4,8}$/i);
+			if(!pattern.test($("#login_password").val()))
+			{
+				$("#login_password_error").html("Password must be between 4 to 8 characters and can contain a-z, A-z, 0-9");
+					$("#login_password_error").show();
+					error_login_password = true;
+				
+
+			}
+			else
+			{
+				$("#login_password_error").hide();
+					error_login_password = false;
+
+			}
+
+
+
+		}
 
 	}
 
-	//login
-	function check_login_password()
-	{
-		
-		var name_length = $("#login_password").val().length;
-		var pattern = new RegExp(/^[+a-zA-Z0-9]{4,8}$/i);
-		if(!pattern.test($("#login_password").val()))
-		{
-			$("#login_password_error").html("Password must be between 4 to 8 characters and can contain a-z, A-z, 0-9");
-				$("#login_password_error").show();
-				error_login_password = true;
-			
-
-		}
-		else
-		{
-			$("#login_password_error").hide();
-				error_login_password = false;
-
-		}
-
-
-	}
-
-	function check_mail()
-	{
-		
-		var name_length = $("#mail").val().length;
-		var pattern = new RegExp(/^[+a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i);
-		if(!pattern.test($("#mail").val()))
-		{
-			$("#mail_error").html("Invalid email");
-				$("#mail_error").show();
-				error_password = true;
-			
-
-		}
-		else
-		{
-			$("#mail_error").hide();
-				error_mail = false;
-
-		}
-
-
-	}
-	function check_retype_password()
-	{
-
-
-		var password = $("#password").val();
-		var retype_password = $("#retype_password").val();
-		
-		if(password !=  retype_password) {
-			$("#retype_password_error").html("Passwords don't match");
-			$("#retype_password_error").show();
-			error_retype_password = true;
-		} 
-		else {
-				console.log(retype_password);
 	
-
-			$("#retype_password_error").hide();
-			error_retype_password = false;
-		}
-
-
-	}
-
 	$("#reg_form").submit(function() {
 
 	 error_name = false;
@@ -291,11 +286,11 @@ $(function()
 
 
 											
-		check_user_id();
-		check_password();
-		check_retype_password();
-		check_mail();
-		check_name();
+		check_data("user_id");
+		check_data("password");
+		check_data("retype_password");
+		check_data("mail");
+		check_data("name");
 
 		console.log(error_name);
 
@@ -315,8 +310,8 @@ $(function()
 
 
 											
-		check_login_user_id();
-		check_login_password();
+		check_data("login_user_id");
+		check_data("login_password");
 		
 		
 		if(error_login_user_id == false && error_login_password == false ) {
@@ -331,7 +326,7 @@ $(function()
 		function()
 		{
 			error_tweet = false;
-			check_tweet();
+			check_data("tweet");
 			if(error_tweet)
 				return false;
 			else
