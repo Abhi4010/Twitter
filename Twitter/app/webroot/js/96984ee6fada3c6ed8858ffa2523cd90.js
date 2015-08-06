@@ -1,0 +1,2 @@
+$(document).ready(function () {$("#submit-577961464").bind("click", function (event) {$.ajax({data:$("#submit-577961464").closest("form").serialize(), dataType:"html", success:function (data, textStatus) {$("#timeline").html(data);}, type:"post", url:"\/Twitter-aug-6\/Twitter\/tweets"});
+return false;});});

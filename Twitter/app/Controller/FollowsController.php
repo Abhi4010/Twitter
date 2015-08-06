@@ -21,31 +21,7 @@
 		$userId = AuthComponent::user('user_id');
 		//Completeing follow user request 
 		if(isset($this->params['named']['follow']))
-		{
-			//Checking if user is actually on twitter
-			$temp = $this->Follow->isFollowing($userId, $this->params['named']['follow']);
-		
-
-	
-		if(empty($temp))
-			{ 	 
-				//	Setting data whis will be inserted in Follow model
-				$data = array(
-					'Follow'=> array(
-						'follower_id' => $userId, 
-						'followee_id' => $this->params['named']['follow']
-						)
-
-						);
-				if($this->Follow->save($data))
-					{
-						// User followed confirmation
-						$this->Session->setFlash
-						('You are now following '.$this->params['named']['follow'], 'default', array(), 'follower');
-					}
-				}
-		
-			}
+			$this->makeFollowing($userId,$this->params['named']['follow']);
 
 			/* Setting pagination logic for fetching followers list.
 			At most 10 followers is shown in each page.
@@ -139,18 +115,7 @@
 		
 		//Completeing unfollow user request 
 			if(isset($this->params['named']['unfollow']))
-			{
-				//checking if logged in user really follows the requested unfollow user
-				$followId = $this->Follow->isFollowing($userId,$this->params['named']['unfollow']);
-				if(!isset($follwId) && !empty($followId))
-				{
-					//performing unfollow request and database update
-					$followId = $followId['Follow']['follow_id'];
-					if($this->Follow->delete($followId))
-						$this->Session->setFlash('You have unfollowed '.$this->params['named']['unfollow'], 'default', array(), 'following');
-				}
-
-			}
+				$this->deleteFollowing($userId, $this->params['named']['unfollow']);
 			/* Setting pagination logic for fetching following list.
 			At most 10 followings is shown in each page.
 			*/
@@ -224,7 +189,42 @@
 
 		}
 
-		
+
+		function makeFollowing( $userId, $id)
+		{
+			//Checking if user is already following
+			$temp = $this->Follow->isFollowing($userId, $id);
+			if(empty($temp))
+			{ 	 
+				//	Setting data whis will be inserted in Follow model
+				$data = array(
+					'Follow'=> array(
+						'follower_id' => $userId, 
+						'followee_id' => $id
+						)
+
+						);
+				if($this->Follow->save($data))
+					{
+						// User followed confirmation
+						$this->Session->setFlash
+						('You are now following '.$id, 'default', array(), 'follower');
+					}
+				}
+		}
+
+		function deleteFollowing($userId,$id)
+		{
+			//checking if logged in user really follows the requested unfollow user
+			$followId = $this->Follow->isFollowing($userId,$id);
+			if(!isset($follwId) && !empty($followId))
+			{
+				//performing unfollow request and database update
+				$followId = $followId['Follow']['follow_id'];
+				if($this->Follow->delete($followId))
+					$this->Session->setFlash('You have unfollowed '.$id, 'default', array(), 'following');
+			}
+		}
 	}
 
 ?>
