@@ -32,6 +32,7 @@ App::uses('Controller', 'Controller');
  */
 class AppController extends Controller 
 {
+    var $hrlpers = array('Html','Form','Js');
 
 	public $components = array(
 		'DebugKit.Toolbar'

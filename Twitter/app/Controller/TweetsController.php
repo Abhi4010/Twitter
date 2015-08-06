@@ -1,7 +1,7 @@
 <?php
 	class TweetsController extends AppController
 	{
-			public $components = array('Paginator');
+			public $components = array('Paginator','RequestHandler');
 
 			public function beforeFilter()
 			{
@@ -47,15 +47,102 @@
 				$this->Tweet->create();
 				if($this->Tweet->save($this->request->data))
 				{
-					return $this->redirect(
-					            			array( 'controller' => 'tweets', 
-					            				   'action' =>'index'
-					            			 	  )
-					        			  );
+					if($this->RequestHandler->isAjax())
+					{
+									// Fetching total number of followers and followings of user
+									$this->set('user_id',$userId);
+									$this->loadModel('Follow');
+									$data = $this->Follow->findAllByFollowerId($userId);
+									$this->set('followee_size',sizeof($data));
+									$data = $this->Follow->findAllByFolloweeId($userId);
+									$this->set('follower_size',sizeof($data));
+
+
+								    /* Pushing all the follwings of user who have declared their tweets not private
+									 and logged in user in $followlist to get all the users whose tweets can be // shown 
+									 */ 
+									 $allFollowee = $this->Follow->findAllByFollowerId($userId);
+									 $followlist = array();
+									 foreach( $allFollowee as $followee)
+									 {
+									 	array_push($followlist,$followee['Follow']['followee_id'] );
+									 }
+									 array_push($followlist,$userId);
+
+									 $this->loadModel('User');
+									 $conditions_first = array( 'User.tweet_private' => '0'
+									 	,array('User.user_id' => $followlist)
+						        					);
+									 
+									 $followlist = $this->User->find("all",array('conditions' => $conditions_first,
+								 	'fields' => 'User.user_id'));
+
+									 $tempfollowlist = array();
+									 foreach( $followlist as $fList)
+									 {
+									 	array_push($tempfollowlist,$fList['User']['user_id'] );
+									 }
+									 $followlist = $tempfollowlist;
+									 if(!in_array($userId, $followlist))
+									 	array_push($followlist, $userId);
+
+								
+									//Settng session condtions for pagination 
+									$conditions = array();
+									if (!empty($this->request->params['named']['page']))
+									   $conditions = (array)$this->Session->read('_indexConditions');
+									 else 
+									   $this->Session->delete('_indexConditions');
+
+									 $data= $userId;
+									 $name = $data;
+									 $conditions = array(
+
+						       							  "IN" =>array('Tweet.user_id' => $followlist)
+						       							);
+									 $this->Session->write('_indexConditions', $conditions);
+
+
+						 
+									 //Pagination query conditions
+									 $this->Paginator->settings = array(
+									         'conditions' => array('Tweet.user_id' => $followlist),
+									         'order' => array('Tweet.created' => 'desc'),
+									         'limit' => 10
+									     );
+									    
+							
+									  if(!empty($conditions))
+									 {
+									 	 $data = $this->Paginator->paginate('Tweet');
+									 	 if(empty($data))
+									 	 	$data = "empty";
+									 }
+									  else
+									  	$data = "";
+									    	
+									    	//Fetching user's tweet count
+											$tweetCount = $this->Tweet->find("count", array('conditions'=> array('Tweet.user_id' => $userId)));
+											//Fetching user's latest tweet
+											$userLatestTweet  = $this->Tweet->find("first", array('conditions'=> array('Tweet.user_id' => $userId),
+											'order' => array('Tweet.created' => 'desc') ));
+											
+											//Setting datas for index view
+											$this->set('tweetdatas',$data);
+									      	$this->set('name',$name);
+											$this->set('userId',$userId);
+											$this->set('tweetCount', $tweetCount);
+											$this->set('userLatestTweet',$userLatestTweet);
+
+								$this->render('tweet','ajax');
+
+					}
+				
 				}
 			
 
 			}
+
 
 			// Fetching total number of followers and followings of user
 			$this->set('user_id',$userId);

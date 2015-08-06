@@ -1,29 +1,14 @@
 <?php 
 	echo $this->Html->css('bootstrap.min');
-	echo $this->element("header_logged_in");
 	echo $this->Html->script("jquery.js", FALSE);
 	echo $this->Html->script("myscript.js", FALSE);
 	echo $this->Html->css('custom');
 	echo $this->Session->flash('index');
-	echo $this->element("c9"); 
-	echo $this->element("c9"); 
 ?> 
 
 
 <div id = "success" style = "padding-left: 20px"class="jumbotron" >
-<?php
-	echo $this->Form->create('Tweet',array('id'=>'tweet_form'));
-	echo $this->Form->input('tweet',array('id' =>'tweet', 'maxlength'=>"500"));
-	echo $this->Html->tag('span', '', array('id' => 'tweet_error','style' => 'color:red'));
-	echo $this->Js->submit('share tweet', array(
-		'update' => '#timeline','id'=>'tweet_submit'));
 
-?>
-</div>
-
-
-<div id="timeline">
-<div id = "success" style = "padding-left: 20px"class="jumbotron" >
 <?php
 	if(!empty($userLatestTweet))
 	{
@@ -38,6 +23,7 @@
 	}
 ?>
 </div>
+
 <div id ="tweets">
 <?php
 //showing tweets
@@ -96,8 +82,6 @@ if( !empty($tweetdatas)  && $tweetdatas !="empty")
 
 ?>
 </div>
-</div>
-
 
 <?php echo $this->element("c3"); ?>
 <?php echo $this->element("c3e"); ?>
@@ -106,36 +90,9 @@ if( !empty($tweetdatas)  && $tweetdatas !="empty")
 	<div class="row">
   	<div class="col-md-2"></div>
   	<div class="col-md-7">
-<?php
- 	echo "<legend>";
-	echo $this->HTML->link($user_id,
-		array('controller' => 'tweets','action' =>'profile',
-			$user_id));
-	echo "<br/>";
-	echo "</legend>";
-	echo $this->HTML->link("Followers:  ",
-		array('controller' => 'follows','action' =>'follower',
-			$user_id));
-	echo $follower_size;
-	echo "<br/>";
-	echo "<br/>";
-		echo $this->HTML->link("Followings: ",
-		array('controller' => 'follows','action' =>'following',
-			$user_id));
-	echo $followee_size;
-	echo "<br/>";
-	echo "<br/>";
-	
-	echo $this->HTML->link("Tweets: ",
-		array('controller' => 'tweets','action' =>'profile',
-			$user_id));
-	echo $tweetCount;	
-
-?>
-</div>
+  	</div>
   <div class="col-md-3"></div>
 </div>
 </div>
 </div>
-
 <?php echo $this->element("c3e"); ?>
