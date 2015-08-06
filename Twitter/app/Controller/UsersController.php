@@ -28,8 +28,7 @@ class UsersController extends AppController {
 		{	
 			$this->User->create();
 			//checking if desired user Id is unique
-			$isUser = $this->User->find('first',array('conditions' =>
-			 array('user_id' =>$this->request->data['User']['user_id'] )));
+			$isUser = $this->User->doesExists($this->request->data['User']['user_id']);
 			if(!empty($isUser))
 			{
 				$this->Session->setFlash('User Id has to be unique','default', array(), 'register');
@@ -115,9 +114,7 @@ class UsersController extends AppController {
 			//Adding user as following
 			$this->loadModel('Follow');
 			//checking if already following
-			$tempResult = $this->Follow->find('first', 
-				array('conditions'=> array('follower_id'=> $userId,
-				 'followee_id' => $this->request->params['named']['follow'] )));
+			$tempResult = $this->Follow->isFollowing($userId, $this->request->params['named']['follow'] );
 			if(empty($tempResult))
 			{
 				//setting data to be inserted in follow model
@@ -179,9 +176,7 @@ class UsersController extends AppController {
 				 		$isTweetPrivate =$d['User']['tweet_private'];
 				 		//checking whether user follows the found user
 				 		$this->loadModel('Follow');
-				 		$temp = $this->Follow->find('first',array('conditions'=> array
-				 			('Follow.follower_id' => $userId, 'Follow.followee_id' => $d['User']['user_id'])
-				 			 ));
+				 		$temp = $this->Follow->isFollowing($userId,$d['User']['user_id']);
 				 		if(!empty($temp) || $d['User']['user_id'] == $userId)
 				 			array_push($doFollows, 1);
 				 		else
@@ -191,12 +186,8 @@ class UsersController extends AppController {
 						 {
 						 //load latest tweet of found user
 						 	$this->loadModel('Tweet');
-						 	$tempTweet =$this->Tweet->find('first',array(
-						 		'conditions' => array( 'Tweet.user_id' => $d['User']['user_id']),
-						 		'order' => array('Tweet.created'=> 'desc')
-						 	
-						 		));
-						 	if(!empty($tempTweet))
+						 	$tempTweet =$this->Tweet->getLatestTweet($d['User']['user_id']);
+						 				 	if(!empty($tempTweet))
 						 	{
 						 		array_push($tweets,$tempTweet['Tweet']['tweet']);
 						 		array_push($tweetsDate,$tempTweet['Tweet']['created']);

@@ -68,4 +68,23 @@ class Tweet extends AppModel {
 			'order' => ''
 		)
 	);
+
+	function getTweet($id)
+	{
+		$tweet = array();
+		$tweet = $this->find('first', array('conditions' => array('Tweet.user_id' => $id),
+			 	 		'order' => array('Tweet.created' => 'desc'),'field' => array('tweet','created','User.name')));
+		return $tweet;
+	}
+	function getTweetCount($id)
+	{
+		return $this->find("count", array('conditions'=> array('Tweet.user_id' => $id)));
+	}
+
+	function getLatestTweet($id)
+	{
+		return $this->find("first", array('conditions'=> array('Tweet.user_id' => $id),
+					'order' => array('Tweet.created' => 'desc') ));
+					
+	}
 }

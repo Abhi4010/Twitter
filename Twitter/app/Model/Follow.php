@@ -57,4 +57,25 @@ class Follow extends AppModel {
 			),
 		),
 	);
+	
+	function isFollowing($follower_id, $followee_id)
+	{
+		$follows = array();
+		$follows = $this->find('first',array('conditions'=>
+			 	 		array('follower_id' => $follower_id, 'followee_id' =>$followee_id)));
+		return $follows;
+	}
+
+	function getFollowerCount($id)
+	{
+		$data = array();
+		$data =   $this->findAllByFolloweeId($id);
+		return(sizeof($data));
+	}
+	function getFollowingCount($id)
+	{
+		$data = array();
+		$data =   $this->findAllByFollowerId($id);
+		return(sizeof($data));
+	}
 }

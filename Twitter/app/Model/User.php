@@ -112,4 +112,18 @@ class User extends AppModel {
 		)
 	);
 
+
+	function isTweetPrivate($user_id)
+	{
+		$data = array();
+		 $data = $this->findByUserId($user_id);
+		 return $data;
+	}
+
+	function doesExists($user_id)
+	{
+		return $this->find('first',array('conditions' =>
+			 array('user_id' => $user_id )));
+	}
+
 }

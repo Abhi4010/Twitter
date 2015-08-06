@@ -7,6 +7,7 @@
 
 			public function beforeFilter()
 			{
+				
 			}
 
 
@@ -22,10 +23,11 @@
 		if(isset($this->params['named']['follow']))
 		{
 			//Checking if user is actually on twitter
-			$temp = $this->Follow->find('first',array('conditions'=>
-			 	 		array('follower_id' => $userId, 'followee_id' =>$this->params['named']['follow'] )
-			 	 		));
-			if(empty($temp))
+			$temp = $this->Follow->isFollowing($userId, $this->params['named']['follow']);
+		
+
+	
+		if(empty($temp))
 			{ 	 
 				//	Setting data whis will be inserted in Follow model
 				$data = array(
@@ -79,21 +81,19 @@
 			 	 $doBothFollows = array();
 			 	 foreach($data as $d)
 			 	 {
-			 	 	$isTweetPrivate = $this->User->findByUserId( $d['Follow']['follower_id']);
+			 	 	$isTweetPrivate = $this->User->isTweetPrivate($d['Follow']['follower_id']);
 			 	 	array_push($userName, $isTweetPrivate['User']['name']);
 			 	 	$isTweetPrivate = $isTweetPrivate['User']['tweet_private'];
 			 	 	
-			 	 	$temp = $this->Tweet->find('first', array('conditions' => array('Tweet.user_id' => $d['Follow']['follower_id']),
-			 	 		'order' => array('Tweet.created' => 'desc'),'field' => array('tweet','created','User.name')));
+			 	 	$temp =  $this->Tweet->getTweet($d['Follow']['follower_id']);
+
 			 	 	//Setting Tweets of followers for view
 			 	 	if(!empty($temp) && !$isTweetPrivate )
 			 	 		array_push($tweetData, $temp['Tweet']);
 			 	 	else
 			 	 		array_push($tweetData, null);
 			 	 	//Checking if logged in user already follows the fetched follower
-			 	 	$temp = $this->Follow->find('first',array('conditions'=>
-			 	 		array('follower_id' => $userId, 'followee_id' =>$d['Follow']['follower_id'] )
-			 	 		));
+			 	 	$temp = $this->Follow->isFollowing($userId,$d['Follow']['follower_id']);
 			 	 	//Setting flag if it is a bidirectional follow
 			 	 	if(empty($temp))
 			 	 		array_push($doBothFollows, 0);
@@ -118,13 +118,11 @@
 			$this->set('userId',$userId);
 			
 			//setting follower count, followling count, tweet count for view
-			$data = $this->Follow->findAllByFollowerId($userId);
-			$this->set('followee_size',sizeof($data));
-			$data = $this->Follow->findAllByFolloweeId($userId);
-			$this->set('follower_size',sizeof($data));
-			$tweetCount = $this->Tweet->find("count", array('conditions'=> array('Tweet.user_id' => $userId)));
-			$this->set('tweetCount', $tweetCount);
-			
+			$this->set('followee_size',$this->Follow->getFollowingCount($userId));
+			$this->set('follower_size',$this->Follow->getFollowerCount($userId));
+			$this->set('tweetCount', $this->Tweet->getTweetCount($userId));
+
+
 			//Setting flag if it is a bidirectional follow for view
 			$this->set('doBothFollows', $doBothFollows);			
 
@@ -143,9 +141,7 @@
 			if(isset($this->params['named']['unfollow']))
 			{
 				//checking if logged in user really follows the requested unfollow user
-				$followId = $this->Follow->find('first',array(
-					'conditions' => array(
-					'followee_id'=> $this->params['named']['unfollow'],'follower_id' =>$userId)));
+				$followId = $this->Follow->isFollowing($userId,$this->params['named']['unfollow']);
 				if(!isset($follwId) && !empty($followId))
 				{
 					//performing unfollow request and database update
@@ -187,7 +183,7 @@
 			 	 $userName = array();
 			 	 foreach($data as $d)
 			 	 {
-			 	 	$isTweetPrivate = $this->User->findByUserId( $d['Follow']['followee_id']);
+			 	 	$isTweetPrivate = $this->User->isTweetPrivate( $d['Follow']['followee_id']);
 			 	 	array_push($userName, $isTweetPrivate['User']['name']);
 			 	 	$isTweetPrivate = $isTweetPrivate['User']['tweet_private'];
 			 	 	
@@ -195,7 +191,7 @@
 			 	 	checking if following's tweet is private. In that case tweet 
 			 	 	is not shown of that user.
 			 	 	*/
-			 	 	
+			 	 
 			 	 	$temp = $this->Tweet->find('first', array('conditions' => array('Tweet.user_id' => $d['Follow']['followee_id']),
 			 	 		'order' => array('Tweet.created' => 'desc'),'field' => array('tweet','created','User.name')));
 			 	 	if(!empty($temp) && !$isTweetPrivate )
@@ -219,12 +215,9 @@
 			$this->set('userId',$userId);
 			//setting count of followers, follows and tweets for following view
 			
-			$data = $this->Follow->findAllByFollowerId($userId);
-			$this->set('followee_size',sizeof($data));
-			$data = $this->Follow->findAllByFolloweeId($userId);
-			$this->set('follower_size',sizeof($data));
-			$tweetCount = $this->Tweet->find("count", array('conditions'=> array('Tweet.user_id' => $userId)));
-			$this->set('tweetCount', $tweetCount);
+			$this->set('followee_size',$this->Follow->getFollowingCount($userId));
+			$this->set('follower_size',$this->Follow->getFollowerCount($userId));
+			$this->set('tweetCount', $this->Tweet->getTweetCount($userId));
 
 
 		
