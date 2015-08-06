@@ -12,6 +12,7 @@
 <?php
 	if(!empty($userLatestTweet))
 	{
+		echo 'haha';
 		echo "<br/>";
 		echo "<legend>Recent tweet</legend>";
   		$linkedText = $this->Text->autoLinkUrls($userLatestTweet['Tweet']['tweet']);

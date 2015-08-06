@@ -30,41 +30,59 @@ class User extends AppModel {
 		'user_id' => array(
 			'notEmpty' => array(
 				'rule' => array('notEmpty'),
-				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
+				'message' => 'User id can not be empty',
+				'allowEmpty' => false,
 			),
+			'alphaNumeric' => array
+			(
+                'rule' => '/^[+a-zA-Z0-9_-]{4,20}$/i',
+                'required' => true,
+                'message' => 'user id must has letters or numbers or - only from 4 to 20 characters'
+			),
+
 		),
 		'name' => array(
 			'notEmpty' => array(
 				'rule' => array('notEmpty'),
-				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
+				'message' => 'Name can not be empty',
+				'allowEmpty' => false,
 			),
+			'alphaNumeric' => array
+			(
+                'rule' => '/^[+a-zA-Z0-9_-]{4,20}$/i',
+                'required' => true,
+                'message' => 'name must has letters or numbers or - only from 4 to 20 characters'
+			),
+
+
 		),
 		'password' => array(
 			'notEmpty' => array(
 				'rule' => array('notEmpty'),
-				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
+				'message' => 'Password can not be empty',
+				'allowEmpty' => false,
+				'required' => true,
 			),
+			'alphaNumeric' => array
+			(
+                'rule' => '/^[+a-zA-Z0-9]{4,8}$/i',
+                'required' => true,
+                'message' => 'password must has letters or numbers or - only from 4 to 8 characters'
+			),
+
 		),
 		'mail' => array(
 			'notEmpty' => array(
 				'rule' => array('notEmpty'),
-				//'message' => 'Your custom message here',
-				//'allowEmpty' => false,
-				//'required' => false,
-				//'last' => false, // Stop validation after this rule
-				//'on' => 'create', // Limit validation to 'create' or 'update' operations
+				'message' => 'Mail must be provided',
+				'allowEmpty' => false,
+				'required' => true,
+			),
+			'alphaNumeric' => array
+			(
+                'rule' => '/^[+a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i',
+                'required' => true,
+                'message' => 'A valid mail id has to provide'
 			),
 		),
 	);

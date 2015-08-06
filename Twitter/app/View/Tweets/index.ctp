@@ -16,7 +16,7 @@
 	echo $this->Form->input('tweet',array('id' =>'tweet', 'maxlength'=>"500"));
 	echo $this->Html->tag('span', '', array('id' => 'tweet_error','style' => 'color:red'));
 	echo $this->Js->submit('share tweet', array(
-		'update' => '#timeline','id'=>'tweet_submit'));
+		'update' => '#timeline'));
 
 ?>
 </div>
